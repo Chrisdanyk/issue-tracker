@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "easymde/dist/easymde.min.css";
 
 :root {
   --background: #ffffff;
