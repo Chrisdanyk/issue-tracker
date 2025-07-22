@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createIssueSchema } from '@/app/validationSchemas'
 import dynamic from 'next/dynamic'
 import ErrorMessage from '@/app/components/ErrorMessage'
+import Spinner from '@/app/components/Spinner'
 
 // Dynamically import SimpleMDE to avoid SSR issues
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
@@ -21,15 +22,19 @@ type IssueForm = z.infer<typeof createIssueSchema>
 const NewIssuePage = () => {
     const router = useRouter()
     const [error, setError] = useState('')
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const { register, control, handleSubmit, formState: { errors } } = useForm<IssueForm>({
         resolver: zodResolver(createIssueSchema)
     })
     const onSubmit = async (data: IssueForm) => {
         try {
+            setIsSubmitting(true)
             await axios.post('/api/issues', data)
             router.push('/issues')
         } catch (error) {
             setError('An unexpected error occurred.')
+        } finally {
+            setIsSubmitting(false)
         }
     }
     return (
@@ -52,7 +57,7 @@ const NewIssuePage = () => {
                     )}
                 />
                 <ErrorMessage>{errors.description?.message}</ErrorMessage>
-                <Button type='submit'>Submit New Issue</Button>
+                <Button type='submit' disabled={true}>Submit New Issue {false && <Spinner />}</Button>
             </form>
         </div>
     )
