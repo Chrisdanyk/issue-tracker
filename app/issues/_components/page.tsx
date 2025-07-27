@@ -7,16 +7,11 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IssueSchema } from '@/app/validationSchemas'
-import dynamic from 'next/dynamic'
 import ErrorMessage from '@/app/components/ErrorMessage'
 import Spinner from '@/app/components/Spinner'
 import { Issue } from '@/app/generated/prisma'
+import SimpleMDE from 'react-simplemde-editor'
 
-// Dynamically import SimpleMDE to avoid SSR issues
-const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
-    ssr: false,
-    loading: () => <p>Loading editor...</p>
-})
 
 type IssueData = z.infer<typeof IssueSchema>
 
