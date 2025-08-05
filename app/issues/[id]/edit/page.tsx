@@ -17,7 +17,7 @@ const EditIssuePage = async ({ params }: Props) => {
         }
     })
     return (
-        <IssueForm issue={issue} />
+        <IssueForm issue={issue ?? undefined} />
     )
 }
 
