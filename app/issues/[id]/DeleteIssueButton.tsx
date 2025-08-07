@@ -3,14 +3,21 @@ import { TrashIcon } from '@radix-ui/react-icons'
 import { AlertDialog, Button, Flex } from '@radix-ui/themes'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 
 const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
     const router = useRouter()
+    const [error, setError] = useState(false)
+
     const deleteIssue = async () => {
-        const res = await axios.delete(`/api/issues/${issueId}`)
-        if (res.status === 200) {
+        try {
+            await axios.delete(`/api/issues/${issueId}`)
             router.push('/issues')
+            router.refresh()
+        } catch (error) {
+            console.log(error)
+            setError(true)
         }
     }
     return (
@@ -39,6 +46,22 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
                                 Delete Issue
                             </Button>
                         </AlertDialog.Action>
+                    </Flex>
+                </AlertDialog.Content>
+            </AlertDialog.Root>
+
+
+            <AlertDialog.Root open={error}>
+                <AlertDialog.Content maxWidth="450px">
+                    <AlertDialog.Title>Error</AlertDialog.Title>
+                    <AlertDialog.Description size="2">
+                        This issue cannot be deleted. Please try again.
+                    </AlertDialog.Description>
+
+                    <Flex gap="3" mt="4" justify="end">
+                        <Button variant="soft" color="gray" onClick={() => setError(false)}>
+                            OK
+                        </Button>
                     </Flex>
                 </AlertDialog.Content>
             </AlertDialog.Root>
