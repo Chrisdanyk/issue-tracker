@@ -1,15 +1,16 @@
 'use client'
 import { TrashIcon } from '@radix-ui/react-icons'
 import { AlertDialog, Button, Flex } from '@radix-ui/themes'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 
 const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
-    const deleteIssue = async (issueId: number) => {
-        const res = await fetch(`/api/issues/${issueId}`, {
-            method: 'DELETE'
-        })
-        if (!res.ok) {
-            // toast.error('Failed to delete issue')
+    const router = useRouter()
+    const deleteIssue = async () => {
+        const res = await axios.delete(`/api/issues/${issueId}`)
+        if (res.status === 200) {
+            router.push('/issues')
         }
     }
     return (
@@ -34,7 +35,7 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
                             </Button>
                         </AlertDialog.Cancel>
                         <AlertDialog.Action>
-                            <Button variant="solid" color="red">
+                            <Button variant="solid" color="red" onClick={deleteIssue}>
                                 Delete Issue
                             </Button>
                         </AlertDialog.Action>
