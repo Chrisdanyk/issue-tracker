@@ -1,6 +1,6 @@
 import "@radix-ui/themes/styles.css";
 import "./theme-config.css";
-import { Theme } from "@radix-ui/themes";
+import { Container, Theme } from "@radix-ui/themes";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -33,7 +33,9 @@ export default function RootLayout({
       >
         <Theme accentColor="violet" appearance="light" scaling="110%">
           <NavBar />
-          <main className='p-5'>{children}</main>
+          <main className='p-5'>
+            <Container>{children}</Container>
+          </main>
         </Theme>
       </body>
     </html>
